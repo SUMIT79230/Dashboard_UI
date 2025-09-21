@@ -12,7 +12,7 @@ const SIDE_MARGIN = 20;
 
 export default function Home() {
   const leftOffset = `calc(${SIDE_MARGIN}px + ${SIDEBAR_WIDTH}px)`;
-  const rightOffset = `calc(${SIDE_MARGIN}px + ${RIGHTBAR_WIDTH}px)`;
+  const rightOffset = `calc(${RIGHTBAR_WIDTH}px)`;
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <CssBaseline />
@@ -23,7 +23,7 @@ export default function Home() {
           top: 0,
           zIndex: (theme) => (theme?.zIndex?.appBar ?? 1200),
           ml: leftOffset,
-          mr: rightOffset,
+          mr: `${rightOffset}`,
           borderBottom: "1px solid",
           borderColor: "divider",
           backgroundColor: (theme) => theme.palette.background.paper,

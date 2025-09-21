@@ -10,42 +10,47 @@ import { styled } from "@mui/material/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-const HIGHLIGHT_BG = "rgba(13,88,255,0.06)"; 
-const MUTED = "#8b97a1"; 
-const LIGHT_BG = "#f7fbfd"; 
+const HIGHLIGHT_BG = "rgba(13,88,255,0.06)";
+const MUTED = "#8b97a1";
+const LIGHT_BG = "#f7fbfd";
 const CARD_BG = "background.paper";
 
+// Centralized card style: single place to change radius / padding / shadow
 const Card = styled(Paper)(({ theme }) => ({
-  borderRadius: 14,
+  borderRadius: 12,           // unified radius
   padding: theme.spacing(2),
   boxShadow: "none",
   backgroundColor: theme.palette.background.paper,
+  boxSizing: "border-box",
 }));
 
 function StatCard({ title, value, change, positive = true, highlight = false }) {
   return (
-    <Card sx={{ bgcolor: highlight ? HIGHLIGHT_BG : CARD_BG, minHeight: 104 ,display:"flex",justifyContent:"center"}}>
-      <Typography variant="caption" sx={{  fontWeight: 700 }}>
-        {title}
-      </Typography>
-
-      <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-        <Typography sx={{ fontSize: 28, fontWeight: 800, lineHeight: 1 }}>
-          {value}
+    <Card sx={{ bgcolor: highlight ? HIGHLIGHT_BG : CARD_BG, minHeight: 104 }}>
+      {/* Column layout for consistent card content */}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+        <Typography variant="caption" sx={{ fontWeight: 700, color: MUTED }}>
+          {title}
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: 1 }}>
-          <Typography
-            variant="caption"
-            sx={{ color: positive ? "success.main" : "text.secondary", fontWeight: 700 }}
-          >
-            {change}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography sx={{ fontSize: 28, fontWeight: 800, lineHeight: 1 }}>
+            {value}
           </Typography>
-          {positive ? (
-            <ArrowUpwardIcon sx={{ fontSize: 14, color: "success.main" }} />
-          ) : (
-            <ArrowDownwardIcon sx={{ fontSize: 14, color: "text.secondary" }} />
-          )}
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography
+              variant="caption"
+              sx={{ color: positive ? "success.main" : "text.secondary", fontWeight: 700 }}
+            >
+              {change}
+            </Typography>
+            {positive ? (
+              <ArrowUpwardIcon sx={{ fontSize: 14, color: "success.main" }} />
+            ) : (
+              <ArrowDownwardIcon sx={{ fontSize: 14, color: "text.secondary" }} />
+            )}
+          </Box>
         </Box>
       </Box>
     </Card>
@@ -54,11 +59,9 @@ function StatCard({ title, value, change, positive = true, highlight = false }) 
 
 function SmallBarChartCard() {
   return (
-    <Card sx={{ height: "100%", minHeight: 220, p: 2, borderRadius: 2 ,backgroundColor:"#F7F9FB"}}>;
-      <Typography
-        variant="subtitle2"
-        sx={{ color: "black", mb: 1, fontWeight: 600 }}
-      >
+    // IMPORTANT: don't override borderRadius here; keep Card's radius
+    <Card sx={{ height: "100%", minHeight: 220, p: 2, backgroundColor: "#F7F9FB" }}>
+      <Typography variant="subtitle2" sx={{ color: "black", mb: 1, fontWeight: 600 }}>
         Projections vs Actuals
       </Typography>
 
@@ -77,19 +80,19 @@ function SmallBarChartCard() {
             <text x="8" y="124">0</text>
           </g>
           <g stroke="#e1e1e1ff" strokeWidth="0.5">
-            <line x1="36" y1="20" x2="352" y2="20" />   
-            <line x1="36" y1="53" x2="352" y2="53" />   
-            <line x1="36" y1="86" x2="352" y2="86" />   
-            <line x1="36" y1="120" x2="352" y2="120" /> 
+            <line x1="36" y1="20" x2="352" y2="20" />
+            <line x1="36" y1="53" x2="352" y2="53" />
+            <line x1="36" y1="86" x2="352" y2="86" />
+            <line x1="36" y1="120" x2="352" y2="120" />
           </g>
 
           {[
-            { x: 50, proj: 12, actual: 58 }, 
-            { x: 90, proj: 18, actual: 46 }, 
-            { x: 130, proj: 14, actual: 68 }, 
-            { x: 170, proj: 22, actual: 84 }, 
-            { x: 210, proj: 12, actual: 50 }, 
-            { x: 250, proj: 18, actual: 76 }, 
+            { x: 50, proj: 12, actual: 58 },
+            { x: 90, proj: 18, actual: 46 },
+            { x: 130, proj: 14, actual: 68 },
+            { x: 170, proj: 22, actual: 84 },
+            { x: 210, proj: 12, actual: 50 },
+            { x: 250, proj: 18, actual: 76 },
           ].map((b, i) => {
             const baseY = 120;
             const barW = 16;
@@ -138,9 +141,9 @@ function SmallBarChartCard() {
 
 function RevenueLineChartCard() {
   return (
-    <Card sx={{ml:4,mr:3,backgroundColor:"#F7F9FB"}}>
+    <Card sx={{ ml: 4, mr: 3, backgroundColor: "#F7F9FB" }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
-        <Typography variant="subtitle2" sx={{ color: "1C1C1C", mr: 1,fontWeight:"600" }}>
+        <Typography variant="subtitle2" sx={{ color: "1C1C1C", mr: 1, fontWeight: "600" }}>
           Revenue
         </Typography>
         <Box sx={{ width: 2, height: 18, bgcolor: "#e4e4e4ff", borderRadius: 1 }} />
@@ -165,42 +168,53 @@ function RevenueLineChartCard() {
           {[0, 1, 2, 3].map((i) => (
             <line key={i} x1="50" x2="740" y1={30 + i * 48} y2={30 + i * 48} stroke="#e6e6e6ff" strokeWidth="1" />
           ))}
-          <g fill="#9d9d9dff" fontSize="11">
+          <g stroke="#e6e6e6" strokeWidth="1">
+            <line x1="50" x2="740" y1="30" y2="30" />
+            <line x1="50" x2="740" y1="78" y2="78" />
+            <line x1="50" x2="740" y1="126" y2="126" />
+            <line x1="50" x2="740" y1="174" y2="174" />
+          </g>
+
+          <g className="axis-text" >
             <text x="10" y="36">30M</text>
             <text x="10" y="84">20M</text>
             <text x="10" y="132">10M</text>
             <text x="10" y="180">0</text>
           </g>
+
+          <g filter="url(#shadow)" opacity="0.95">
+            <path
+              className="line draw-slow"
+              d="M50,120
+                 C95,70 175,60 260,90
+                 C340,120 430,110 520,95
+                 C590,85 660,120 700,100"
+              stroke="#ABC5DA"
+              strokeWidth="5"
+              fill="none"
+              opacity="0.95"
+            />
+          </g>
+
           <path
-            d="M50 120
-              C120 70, 220 60, 330 95
-              S540 120, 660 100"
-            fill="none"
-            stroke="#bcd6ee"
+            className="line draw"
+            d="M70,130
+               C120,185 200,200 300,110
+               C380,40 470,90 540,100
+               C610,110 660,110 740,120"
+            stroke="#1C1C1C"
             strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            fill="none"
           />
 
           <path
-            d="M70 130
-              C110 180, 210 190, 320 100
-              S520 80, 530 100"
-            fill="none"
-            stroke="#111111"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M530 100
-              S700 160, 740 120"
-            fill="none"
-            stroke="#111111"
+            d="M740,120 S760,145 780,150"
+            className="line"
+            stroke="grey"
             strokeWidth="3.2"
-            strokeLinecap="round"
             strokeDasharray="6 6"
-            opacity="0.95"
+            opacity="0.12"
+            fill="none"
           />
           {["Jan","Feb","Mar","Apr","May","Jun"].map((m, i) => (
             <text key={m} x={50 + i * 110} y="210" fontSize="11" fill="#9aa6ad">{m}</text>
@@ -222,8 +236,8 @@ function RevenueByLocationCard() {
   const max = Math.max(...rows.map((r) => r.value));
 
   return (
-    <Card sx={{backgroundColor:"#F7F9FB" ,p: 2 ,ml:4,pb:4}}>
-      <Typography variant="subtitle2" sx={{  mb: 2 ,fontWeight:600}}>
+    <Card sx={{ backgroundColor: "#F7F9FB", p: 2, ml: 4, pb: 4 }}>
+      <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
         Revenue by Location
       </Typography>
 
@@ -301,8 +315,8 @@ function TopSellingProductsCard() {
   ];
 
   return (
-    <Card sx={{ml:4 ,mr:2,backgroundColor:"#F7F9FB"}}>
-      <Typography variant="subtitle1" sx={{ mb: 1 ,fontWeight:"600"}}>
+    <Card sx={{ ml: 4, mr: 2, backgroundColor: "#F7F9FB" }}>
+      <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: "600" }}>
         Top Selling Products
       </Typography>
 
@@ -360,7 +374,7 @@ function TotalSalesCard() {
   ];
 
   return (
-    <Card sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "stretch",ml:4,backgroundColor:"#F7F9FB" }}>
+    <Card sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "stretch", ml: 4, backgroundColor: "#F7F9FB" }}>
       <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
         Total Sales
       </Typography>
@@ -407,7 +421,6 @@ function TotalSalesCard() {
                 strokeDashoffset="-250"
                 transform="rotate(-90)"
               />
-
             </g>
           </svg>
           <Box
@@ -432,7 +445,7 @@ function TotalSalesCard() {
         </Box>
       </Box>
 
-      <Box sx={{ mt: 1,ml:2,mr:2, display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box sx={{ mt: 1, ml: 2, mr: 2, display: "flex", flexDirection: "column", gap: 1 }}>
         {items.map((it) => (
           <Box
             key={it.label}
@@ -461,35 +474,36 @@ function TotalSalesCard() {
 
 export default function Frame() {
   return (
-    <Box sx={{ml:2}}>
-      <Typography variant="subtitle2" sx={{ mb: 4 ,fontWeight:600,ml:4}}>eCommerce</Typography>
-        <Grid sx = {{marginLeft:"32px"}} container spacing={12} alignItems="stretch">
-          <Grid item xs={2} md={2} >
-            <Grid container spacing={12} sx ={{marginBottom:"40px"}}>
-              <Grid item xs={2} sm={2} sx={{backgroundColor:"#E3F5FF"}}>
-                <StatCard title="Customers" value="3,781" change="+11.01%" positive highlight />
-              </Grid>
-
-              <Grid item xs={2} sm={2}>
-                <StatCard title="Orders" value="1,219" change="-0.03%" positive={false} />
-              </Grid>
+    <Box sx={{ ml: 2 }}>
+      <Typography variant="subtitle2" sx={{ mb: 4, fontWeight: 600, ml: 4 }}>eCommerce</Typography>
+      <Grid sx={{ marginLeft: "32px" }} container spacing={12} alignItems="stretch">
+        <Grid item xs={12} md={2}>
+          <Grid container spacing={2} sx={{ marginBottom: "40px" }}>
+            <Grid item xs={6} sm={6}>
+              <StatCard title="Customers" value="3,781" change="+11.01%" positive highlight />
             </Grid>
-            <Grid container spacing={12}>
-              <Grid item xs={2} sm={2}>
-                <StatCard title="Revenue" value="$695" change="+15.03%" positive />
-              </Grid>
 
-              <Grid item xs={2} sm={2} sx={{backgroundColor:"#E5ECF6"}}>
-                <StatCard title="Growth" value="30.1%" change="+6.08%" positive highlight />
-              </Grid>
+            <Grid item xs={6} sm={6}>
+              <StatCard title="Orders" value="1,219" change="-0.03%" positive={false} />
             </Grid>
           </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={6} sm={6}>
+              <StatCard title="Revenue" value="$695" change="+15.03%" positive />
+            </Grid>
 
-          <Grid item xs={12} md={4}>
-            <SmallBarChartCard />
+            <Grid item xs={6} sm={6}>
+              <StatCard title="Growth" value="30.1%" change="+6.08%" positive highlight />
+            </Grid>
           </Grid>
         </Grid>
-      <Grid container spacing={2} sx={{ mt: 8,mb:8 }}>
+
+        <Grid item xs={12} md={4}>
+          <SmallBarChartCard />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} sx={{ mt: 8, mb: 8 }}>
         <Grid item xs={12} md={8}>
           <RevenueLineChartCard />
         </Grid>
@@ -498,6 +512,7 @@ export default function Frame() {
           <RevenueByLocationCard />
         </Grid>
       </Grid>
+
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={12} md={8}>
           <TopSellingProductsCard />

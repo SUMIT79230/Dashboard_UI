@@ -2,14 +2,20 @@
 
 This is my React + MUI + Redux dashboard project.  
 I built it as a modern admin dashboard with support for dark/light mode, global state management, and reusable components.
-
+Demo link - [https://dashboard-ui-zzj7.vercel.app/]
 ---
 
-## 🛠 Setup & Run
-- Clone the repo  
-- Install dependencies → `npm install`  
-- Run locally → `npm run dev`  
-- Build for production → `npm run build`
+## 🚀 Setup & Installation
+
+1. **Clone the repository**
+   git clone https://github.com/your-username/dashboard-ui.git
+   cd dashboard-ui
+
+2. Install dependencies
+   npm install
+
+3. npm start
+   This will run the app on http://localhost:3000.
 
 ---
 
@@ -50,3 +56,4 @@ I built it as a modern admin dashboard with support for dark/light mode, global 
 ## 👨‍💻 Author
 - Built with using React, MUI, Redux Toolkit  
 - Open for feedback and improvements!
+
