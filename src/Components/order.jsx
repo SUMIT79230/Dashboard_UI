@@ -134,7 +134,7 @@ export default function Order() {
 
   return (
     <Box p={3}>
-      <Typography variant="h5" sx={{ ml :3,fontWeight: 500 }}>
+      <Typography variant="h5" sx={{ ml :1,mb:2,fontWeight: 550 }}>
         Order List
       </Typography>
 
