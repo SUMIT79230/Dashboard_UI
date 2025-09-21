@@ -12,12 +12,11 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const HIGHLIGHT_BG = "rgba(13,88,255,0.06)";
 const MUTED = "#8b97a1";
-const LIGHT_BG = "#f7fbfd";
+const LIGHT_BG = "#ffffffff";
 const CARD_BG = "background.paper";
 
-// Centralized card style: single place to change radius / padding / shadow
 const Card = styled(Paper)(({ theme }) => ({
-  borderRadius: 12,           // unified radius
+  borderRadius: 12,         
   padding: theme.spacing(2),
   boxShadow: "none",
   backgroundColor: theme.palette.background.paper,
@@ -27,7 +26,6 @@ const Card = styled(Paper)(({ theme }) => ({
 function StatCard({ title, value, change, positive = true, highlight = false }) {
   return (
     <Card sx={{ bgcolor: highlight ? HIGHLIGHT_BG : CARD_BG, minHeight: 104 }}>
-      {/* Column layout for consistent card content */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
         <Typography variant="caption" sx={{ fontWeight: 700, color: MUTED }}>
           {title}
@@ -59,7 +57,6 @@ function StatCard({ title, value, change, positive = true, highlight = false }) 
 
 function SmallBarChartCard() {
   return (
-    // IMPORTANT: don't override borderRadius here; keep Card's radius
     <Card sx={{ height: "100%", minHeight: 220, p: 2, backgroundColor: "#F7F9FB" }}>
       <Typography variant="subtitle2" sx={{ color: "black", mb: 1, fontWeight: 600 }}>
         Projections vs Actuals
@@ -475,7 +472,7 @@ function TotalSalesCard() {
 export default function Frame() {
   return (
     <Box sx={{ ml: 2 }}>
-      <Typography variant="subtitle2" sx={{ mb: 4, fontWeight: 600, ml: 4 }}>eCommerce</Typography>
+      <Typography variant="subtitle2" sx={{mt:4, mb: 2, fontWeight: 600, ml: 4 }}>eCommerce</Typography>
       <Grid sx={{ marginLeft: "32px" }} container spacing={12} alignItems="stretch">
         <Grid item xs={12} md={2}>
           <Grid container spacing={2} sx={{ marginBottom: "40px" }}>

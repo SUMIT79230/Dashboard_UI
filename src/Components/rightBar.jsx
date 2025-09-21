@@ -1,16 +1,26 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
-import { blue, grey } from "@mui/material/colors";
+import React from "react";
+import {
+  Box,
+  Avatar,
+  Typography,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  useTheme,
+  useMediaQuery,
+  Drawer,
+  IconButton,
+  Fab,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import BugReportOutlinedIcon from "@mui/icons-material/BugReportOutlined";
 import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsActiveOutlined";
+import { blue, grey } from "@mui/material/colors";
 
 const notifications = [
   { Icon: NotificationsOutlinedIcon, text: "You have a bug that needs...", time: "Just now" },
@@ -36,29 +46,34 @@ const contacts = [
   { name: "Koray Okumus", avatarUrl: "https://i.pravatar.cc/40?img=11" },
 ];
 
-export default function RightBar() {
-  const IconBubble = ({ IconComponent }) => (
-    <Avatar sx={{ bgcolor: blue[50], color: "black", width: 25, height: 25 }}>
+function IconBubble({ IconComponent }) {
+  return (
+    <Avatar sx={{ bgcolor: blue[50], color: "black", width: 28, height: 28 }}>
       <IconComponent fontSize="small" />
     </Avatar>
   );
+}
+
+function RightBarContent({ compact = false, onClose }) {
+  const avatarSize = compact ? 26 : 28;
+  const titleSize = compact ? "subtitle2" : "subtitle1";
 
   return (
-    <Box sx={{ width: 320, height: "100%", overflow: "visible", px: 2, pt: 3, pb: 4 }}>
-      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
+    <Box sx={{ width: "100%", px: compact ? 1.5 : 2, pt: compact ? 1.5 : 0, pb: compact ? 2 : 4 }}>
+      <Typography variant={titleSize} sx={{ fontWeight: 600, mb: compact ? 1 : 2 }}>
         Notifications
       </Typography>
 
-      <List sx={{ p: 0, pt: 2, pb: 2, m: 0 }}>
+      <List sx={{ p: 0, pt: compact ? 1 : 2, pb: compact ? 1 : 2 }}>
         {notifications.map((n, i) => (
-          <ListItem key={i} alignItems="flex-start" disableGutters sx={{ py: 0.4 }}>
-            <ListItemAvatar sx={{ minWidth: 40, mr: 1.5 }}>
+          <ListItem key={i} alignItems="flex-start" disableGutters sx={{ py: compact ? 0.5 : 0.75 }}>
+            <ListItemAvatar sx={{ minWidth: compact ? 40 : 48, mr: compact ? 1 : 1.5 }}>
               <IconBubble IconComponent={n.Icon} />
             </ListItemAvatar>
 
             <ListItemText
               primary={
-                <Typography variant="body2" sx={{ fontWeight: 400, fontSize: 14, lineHeight: "18px" }}>
+                <Typography variant="body2" sx={{ fontWeight: 400, fontSize: compact ? 13 : 14, lineHeight: "18px" }}>
                   {n.text}
                 </Typography>
               }
@@ -72,11 +87,11 @@ export default function RightBar() {
         ))}
       </List>
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.4 }}>
+      <Typography variant={titleSize} sx={{ fontWeight: 600, mb: compact ? 0.5 : 0.75 }}>
         Activities
       </Typography>
 
-      <Box sx={{ position: "relative", pt: 2, pb: 1.5 }}>
+      <Box sx={{ position: "relative", pt: compact ? 1 : 2, pb: compact ? 1 : 1.5 }}>
         <List sx={{ p: 0, m: 0 }}>
           {activities.map((a, i) => {
             const isLast = i === activities.length - 1;
@@ -86,13 +101,13 @@ export default function RightBar() {
                 alignItems="flex-start"
                 disableGutters
                 sx={{
-                  py: 1,
+                  py: compact ? 0.75 : 1,
                 }}
               >
                 <ListItemAvatar
                   sx={{
-                    minWidth: 48,
-                    mr: 2,
+                    minWidth: compact ? 42 : 48,
+                    mr: compact ? 1.5 : 2,
                     position: "relative",
                     zIndex: 2,
                     display: "flex",
@@ -103,8 +118,8 @@ export default function RightBar() {
                     src={a.avatarUrl}
                     alt={a.text}
                     sx={{
-                      width: 28,
-                      height: 28,
+                      width: avatarSize,
+                      height: avatarSize,
                       fontSize: 13,
                       bgcolor: "#f0f4fa",
                       color: "black",
@@ -117,12 +132,11 @@ export default function RightBar() {
                       .slice(0, 1)
                       .join("")}
                   </Avatar>
-
                 </ListItemAvatar>
 
                 <ListItemText
                   primary={
-                    <Typography variant="body2" sx={{ fontWeight: 400, fontSize: 14, lineHeight: "18px" }}>
+                    <Typography variant="body2" sx={{ fontWeight: 400, fontSize: compact ? 13 : 14, lineHeight: "18px" }}>
                       {a.text}
                     </Typography>
                   }
@@ -136,36 +150,37 @@ export default function RightBar() {
                 <Box
                   sx={{
                     position: "absolute",
-                    left: 15,
-                    top: "80%",
+                    left: compact ? 18 : 20,
+                    top: compact ? "78%" : "80%",
                     bottom: isLast ? "50%" : 0,
                     width: 2,
                     bgcolor: "#d7d7d7ff",
                     borderRadius: 1,
                     zIndex: 1,
-                }} />
+                  }}
+                />
               </ListItem>
             );
           })}
         </List>
       </Box>
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mt={2} mb={1.5}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" mt={compact ? 1.5 : 2} mb={compact ? 0.5 : 1.5}>
+        <Typography variant={titleSize} sx={{ fontWeight: 600 }}>
           Contacts
         </Typography>
       </Stack>
 
       <List sx={{ p: 0, m: 0 }}>
         {contacts.map((c, i) => (
-          <ListItem key={i} disableGutters sx={{ py: 1 }}>
-            <ListItemAvatar sx={{ minWidth: 36, mr: 3 }}>
+          <ListItem key={i} disableGutters sx={{ py: compact ? 0.75 : 1 }}>
+            <ListItemAvatar sx={{ minWidth: compact ? 36 : 48, mr: compact ? 1.5 : 3 }}>
               <Avatar
                 src={c.avatarUrl}
                 alt={c.name}
                 sx={{
-                  width: 28,
-                  height: 28,
+                  width: compact ? 28 : 32,
+                  height: compact ? 28 : 32,
                   bgcolor: grey[100],
                   color: grey[900],
                   fontSize: 13,
@@ -182,7 +197,7 @@ export default function RightBar() {
 
             <ListItemText
               primary={
-                <Typography variant="body2" sx={{ fontSize: 14, lineHeight: "18px", fontWeight: 400 }}>
+                <Typography variant="body2" sx={{ fontSize: compact ? 13 : 14, lineHeight: "18px", fontWeight: 400 }}>
                   {c.name}
                 </Typography>
               }
@@ -191,5 +206,107 @@ export default function RightBar() {
         ))}
       </List>
     </Box>
+  );
+}
+
+export default function RightBar() {
+  const theme = useTheme();
+  const mdUp = useMediaQuery(theme.breakpoints.up("md")); 
+  const smUp = useMediaQuery(theme.breakpoints.up("sm")); 
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+
+  if (mdUp) {
+    return (
+      <Box
+        sx={{
+          width: 320,
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1150,
+          borderLeft: "1px solid",
+          borderColor: "divider",
+          display: { xs: "none", md: "block" },
+          bgcolor: (theme) => theme.palette.background.paper,
+          overflowY: "auto",
+          overflowX: "hidden",
+          boxSizing: "border-box",
+          px: 2,
+          pt: 3,
+          pb: 4,
+        }}
+      >
+        <RightBarContent compact={false} />
+      </Box>
+    );
+  }
+
+  if (smUp && !mdUp) {
+    return (
+      <Box
+        sx={{
+          width: 240,
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1150,
+          borderLeft: "1px solid",
+          borderColor: "divider",
+          display: { xs: "none", sm: "block", md: "none" },
+          bgcolor: (theme) => theme.palette.background.paper,
+          overflowY: "auto",
+          overflowX: "hidden",
+          boxSizing: "border-box",
+          px: 1.5,
+          pt: 2,
+          pb: 3,
+        }}
+      >
+        <RightBarContent compact={true} />
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <Fab
+        color="primary"
+        size="small"
+        aria-label="Open right bar"
+        onClick={() => setDrawerOpen(true)}
+        sx={{
+          position: "fixed",
+          right: 16,
+          bottom: 18,
+          zIndex: 1400,
+          boxShadow: 4,
+        }}
+      >
+        <ChatIcon />
+      </Fab>
+
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", px: 2, py: 1.25, borderBottom: "1px solid", borderColor: "divider" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+            Notifications
+          </Typography>
+          <IconButton aria-label="Close" onClick={() => setDrawerOpen(false)} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ overflowY: "auto", height: "100%" }}>
+          <RightBarContent compact={false} onClose={() => setDrawerOpen(false)} />
+        </Box>
+      </Drawer>
+    </>
   );
 }
